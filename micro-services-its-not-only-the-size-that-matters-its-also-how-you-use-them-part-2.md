@@ -1,20 +1,63 @@
 
 
-Microservices: It��s not (only) the size that matters, it��s (also) how you use them �C part 2
+Microservices: It’s not (only) the size that matters, it’s (also) how you use them – part 2
 
 > https://www.tigerteam.dk/2014/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-2/
 
-�� "Micro services: It��s not (only) the size that matters, it��s (also) how you use them �C part 1" һ���У�����������ʹ�ô���������ȷ�������С�Ǵֱ��ģ�����ȷ�������Ƿ�߱���ȷ��ְ��Ҳ����ȫ������ġ�
+在 "Micro services: It’s not (only) the size that matters, it’s (also) how you use them – part 1" 一文中，我们讨论了使用代码行数来确定服务大小是粗暴的，用来确定服务是否具备正确的职责也是完全无意义的。
 
-���ǻ�̸���˷���˫��ͬ��ͨ�ŵ��µ�ǿ���������������գ�
-  ����ͨ����ص���ϣ���Ϊ���ݺ��߼�������һ�������ڣ���Ҳ���·����ͬ�����ݡ���������Լ�����ͨ�ŵĸ��ӳ�ʱ��
-  �ֲ���ϣ��־û�������һ�������ڣ�
-  ��ʱ��ϣ����������������������޷�����ʱ���񲻿��ã�
-  ��ʵ�Ƿ����������������������������Ҳ�÷��񲻿ɿ�
-  ������Щ����û�пɿ���Ϣ������ʱ���ӵ��߼�����
+我们还谈到了服务双向同步通信导致的强耦合问题和其他烦恼：
+  导致通信相关的耦合（因为数据和逻辑不总在一个服务内），也导致服务合同、数据、功能耦合以及网络通信的高延迟时间
+  分层耦合（持久化不总在一个服务内）
+  临时耦合（当服务依赖的其他服务无法访问时服务不可用）
+  事实是服务依赖其他服务减少了自治能力也让服务不可靠
+  所以这些导致没有可靠消息和事务时复杂的逻辑补偿
 
-![�ɸ��õķ���˫��ͬ��ͨ�ź����](http://www.tigerteam.dk/wp-content/uploads/2014/03/reusable-services-and-coupling.png)
+![可复用的服务，双向同步通信和耦合](http://www.tigerteam.dk/wp-content/uploads/2014/03/reusable-services-and-coupling.png)
 
-����������ͬ��˫��ͨ�ŵ�С����Ҳ�ã�΢����Ҳ�ã����� 1 class = 1 service �Ľ�ģ��ʽ������ʵ���ϵ��˻��� 90 ����� Corba��J2EE���ֲ�ʽ����������
+如果我们组合同步双向通信的小服务也好，微服务也好，依据 1 class = 1 service 的建模方式，我们实际上倒退回了 90 年代的 Corba、J2EE、分布式对象的年代。
 
-���ҵ��ǣ��ƺ���һ���Ŀ�����Աû�о�����
+不幸的是，新一代的开发人员并没有分布式对象的使用经验，因此也参与过此类项目去了解这些想法是多么可怕，他们在重复这段历史，只是换了一些新的技术，比如用 HTTP 代替了 RMI 和 
+
+IIOP。
+
+Jay Kreps 非常恰当的概括了目前微服务使用双向通信的方式：
+
+![Jay Kreps - 微服务 == 时髦人士的分布式对象](http://www.tigerteam.dk/wp-content/uploads/2014/03/Jay-Kreps-Microservices-equals-distributed-objects.png)
+
+仅仅因为微服务倾向于使用 HTTP、JSON、REST 并没有填补远程通信的劣势。新手常常忽略的分布式计算的劣势可以归纳为 8 个分布式计算谬论：
+
+他们相信：
+网络可靠。不管怎样，任何一个碰到过服务器连接断开，或者因为路由器、交换机、WIFI 等问题导致 Internet 无法连接的人，或多或少都知道这是个谬论。
+延迟是零。网络调用相对于进程内调用的高额成本常常被忽视。带宽有限，相对于以前纳秒级调用网络调用的延迟是毫秒级的。连续执行的调用越多，整体的延迟越差。
+带宽无限。实际上，即使 10G 带宽也比进程内内存调用慢的多，在固定带宽下，调用发送的数据越多，服务越小，调用的次数越多，影响越大。
+网络安全。国家安全局会告诉你为什么这是个谬论。
+拓扑不变。现实不是这样，产品环境的服务将经历运行环境的不断变化。旧的服务器会升级或替换，IP 地址也会变，防火墙等网络设备也会重新配置。
+单一管理员。大规模安装配置需要多个管理员，网络管理员，Windows 管理员，Unix 管理员，数据库管理员等。
+同类网络。多数网路有不同操作系统下支持各种网络协议的各种品牌的网络设备组成的。
+
+以上 8 个分布式计算谬论远没有完，如果你还有兴趣，Arnon Rotem-Gal-Oz 做了更详细的回顾。
+
+有没有服务间双向同步调用的替换方案？
+
+Pat Hellands 在 "Life Beyond Distributed Transactions(交易) – An Apostate’s Opinion" 文中基本给出了答案。
+文中 Pat 谈到理性的人不会使用分布式事务来协调事务边界。有很多理由不使用分布式事务：
+
+事务启动时会锁定资源。服务应该是自治的，因此如果另一个服务通过一个分布式事务锁定了某个资源，就违反了服务自治规则。
+不能期望服务在制定的时间内完成。服务是自治的，因此能自己决定怎样以及何时执行。这意味着服务链中最弱的一环决定了服务链的强度。
+锁定防止其他交易的完成他们的工作。
+锁定导致不能扩展。如果事务花费 200 毫秒锁定了一张表，那么服务最多每秒只能接受 5 个并发事务。增加再多的机器都不能改变每个事务锁定表格的时间。
+2 阶段/3 阶段/ X 阶段提交的分布式事务是脆弱的设计。即使 X 阶段提交分布式事务以牺牲性能为代价解决了协调跨事务边界更新的问题。
+仍然还有很多将 X 阶段提交留着未知状态的错误情景。
+
+![两阶段提交协议流程](http://www.tigerteam.dk/wp-content/uploads/2014/03/2-phase-commit-protocol-flow.png)
+
+如果分布式事务不是解决方案，解决方案是什么？
+
+解决方案分三步：
+
+怎么拆分数据和服务
+怎样发现数据和服务
+数据和服务间如何通信
+
+如果拆分和标记数据和服务
