@@ -48,7 +48,7 @@ Pat Hellands 在 "Life Beyond Distributed Transactions(交易) – An Apostate�
 锁定防止其他交易的完成他们的工作。
 锁定导致不能扩展。如果事务花费 200 毫秒锁定了一张表，那么服务最多每秒只能接受 5 个并发事务。增加再多的机器都不能改变每个事务锁定表格的时间。
 2 阶段/3 阶段/ X 阶段提交的分布式事务是脆弱的设计。即使 X 阶段提交分布式事务以牺牲性能为代价解决了协调跨事务边界更新的问题。
-仍然还有很多将 X 阶段提交留着未知状态的错误情景。
+仍然还有很多将 X 阶段提交留着未知状态的错误情景。（比如两阶段提交在提交阶段被中断，意味着一些参与者已经承诺了他们的修改，而另一些则没有。如果一个只有参与者失败了，将处于提交不可用的尴尬状态。）
 
 ![两阶段提交协议流程](http://www.tigerteam.dk/wp-content/uploads/2014/03/2-phase-commit-protocol-flow.png)
 
@@ -61,3 +61,40 @@ Pat Hellands 在 "Life Beyond Distributed Transactions(交易) – An Apostate�
 数据和服务间如何通信
 
 如果拆分和标记数据和服务
+
+Pat Helland 认为，数据必须被集中成实体，实体需要限定大小已保证在事务范围呢的一致性。
+这就意味着实体不能突破单台机器的限制（跨机器的一致性保证需要分布式事务，这是我们之前希望避免的）。这也需要实体相对于更改实体的用例来说不能太小，如果实体太小，我们就又回到了需要使用分布式事务来保证跨服务更新的老路上。
+
+经验法则：一个事务只处理一个实体。
+
+来个真实世界的例子：
+
+我之前一个项目可以做反面教材，为了重用把服务分的过细，结果服务稳定性、事务性、低耦合、低延迟都失去了。
+
+客户想确保最大化的重用两个领域概念，LegalEntity 和 Address，任何LegalEntity需要使用地址的场合都要用到 Address，比如家庭地址、工作地址、邮件、电话、手机、GPS位置等等。为了协调创建、更新、读取以及确保重用，引入一个 Task Service，"Legal Entity Task Service" 将会协调 "Legal Entity Micro Service" 和 "Address Micro Service"，"Legal Entity Task Service" 是我们创建的一个 Task Service 的角色，但是这并没有解决最重要的事务问题。
+
+创建一个 LegalEntity，比如个人或者公司，我们首先通过 "Legal Entity Micro Service" 生成一个 LegalEntity，同时使用 "Address Micro Service" 生成了一个或多个 Address（"Legal Entity Task Service" 中的 CreateLegalEntity()决定了创建几个 Address），每个 Address 都有从 "Address Micro Service" 的 CreateAddress() 方法返回的 AddressId，"Legal Entity Micro Service" 的 CreateLogalEntity() 方法通过 "Legal Entity Micro Service" 里的 AssociateLegalEntityWithAddress() 方法将 LegalEntityId 和 AddressId 关联起来。
+
+![不正确的微服务](http://www.tigerteam.dk/wp-content/uploads/2014/03/Bad-microservices-Create.png)
+
+从上面的序列图，我们清楚的看到了各种级别的深度的耦合，如果 "Address Micro Service" 没有应答，就不能创建 LegalEntity。这种方案的延迟很高，因为有太多的远程调用。使用并行调用可以减少延迟，但是这种小的优化解决不了问题的本质，事务问题仍然存在。
+
+假设 CreateAddress() 或者 AssociateLegalEntityWithAddress() 中的一个调用失败，我们就留下了一条脏记录，我们创建了一个 LegalEntity 但是其中一个 CreateAddress() 调用失败，导致系统数据不一致性，因为并不是所有的数据都创建成功。即使我们成功的创建了 LegalEntity 以及相关的全部地址，也会出现某些时候获取 LegalEntity 时无法完整获得该实体全部 Address 的情况，这也造成系统的不一致性。
+
+这种服务的组合调用造成了 "Legal Entity Micro Service" 里的 CreateLegalEntity() 方法不堪重负，现在他得负责在调用失败时重试以及产生的一系列清理工作（补偿）。当某个服务的清理工作失败，你想怎么做？"Legal Entity Micro Service" 里的 CreateLegalEntity() 在尝试重试一个失败的服务调用或者执行清理工作时发生服务器物理故障怎么办？开发人员能保证 CreateLegalEntity() 方法的正确实现么？ 开发者能确保 CreateAddress() 方法和 AssociateLegalEntityWithAddress() 方法是幂等的？如果不能，重试服务调用时会不会创建两个 Address 对象或者把 Address 跟 LegalEntity 关联了两次？
+
+事务性问题可以通过研究用例进而对重用粒度重新评估来解决。
+
+LegalEntity 和 Address 服务的设计需要架构团队设计一个合乎逻辑的标准模型，并从中发掘出什么是可重用的服务。这种方式的问题是，一个标准数据模型没有考虑数据是如何使用的，也就是没有考虑该数据用例。究其原因，数据修改/创建的方式决定了事务的边界，也就是我们说的一致性界限。根据经验，在一个事务或者说一个用例内会发生修改的数据，应该有紧密相关且有统一的所有权。
+
+所以我们的经验法则扩展为：1 usercase = 1 transaction = 1 entity
+
+把地址提升为服务允许直接访问是我们犯的第二个错误。可以说，把重心放在重用带来了一种必须把地址包装成服务的感觉，这是在假设每个人都需要地址服务并且随时希望修改城市名称或者邮政编码，也许会有合理的原因将一些信息集中提供服务，但是每件事儿都做成这样成本就太高了。
+
+数据模型看起来像这样：
+
+![不好的微服务数据模型](http://www.tigerteam.dk/wp-content/uploads/2014/03/Bad-microservices-data-model.png)
+
+如图中模型，LegalEntity 和 Address 的对应关系是共享直接关联，这就表示两个 LegalEntity 可以共享一个 Address 实例。尽管这种情况不会发生，因为两者是一种直接组合关联，更像一种父子关系。如果 LegalEntity 对象 被删除，Address 对象也就没有存储的必要了，父子关系表达了 LegalEntity 和 Address 密切的属于一个整体，他们被共同创造，一起改变，一起被使用。
+
+这意味着我们不是有两个实体，而是一个实体
