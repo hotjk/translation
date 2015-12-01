@@ -97,4 +97,31 @@ LegalEntity 和 Address 服务的设计需要架构团队设计一个合乎逻�
 
 如图中模型，LegalEntity 和 Address 的对应关系是共享直接关联，这就表示两个 LegalEntity 可以共享一个 Address 实例。尽管这种情况不会发生，因为两者是一种直接组合关联，更像一种父子关系。如果 LegalEntity 对象 被删除，Address 对象也就没有存储的必要了，父子关系表达了 LegalEntity 和 Address 密切的属于一个整体，他们被共同创造，一起改变，一起被使用。
 
-这意味着我们不是有两个实体，而是一个实体
+这意味着我们不应该有两个实体，实际上只有一个实体，LegalEntity，一个或多个 Address 对象紧密的与实体关联。Pat Hellands 的实体一次是从领域驱动设计（DDD）中得来，DDD 还包括更丰富的词汇：
+
+实体（Entity）-- 描述一个可以用标识而不是它的数据来辨识的对象，比如 Legal Entity（它的子类 Person 用社会安全号来标识，子类 Company 用增值税税号来标识，等等）
+
+值对象（Value Object）-- 描述一个可以用数据而不是标识来辨识的对象，比如地址、姓名、Email地址，两个同样类型的值对象，具备同样的值就以为着两者相等。值对象不会独立存在，它总是作为一部分被关联在实体上，值对象作为实体的数据而存在。
+
+聚合（Aggregate）-- 一群有着复杂关系的对象串在一起，聚合用于保证其关联对象的一致性。聚合也用于锁控制，以及在分布式系统中确保事务一致性。
+  聚合中选择一个实体作为根并要求只能通过聚合根访问聚合内的对象。
+  聚合通过 ID 来唯一标识（常常是 UUID 后者 GUID）。
+  聚合之间通过 ID 来引用，聚合之间绝对不要用内存指针或者关联表来引用。（下篇文章会再次谈到）
+
+从描述中我们能断定 Pat Helland 说到的实体在 DDD 的官方词汇里叫做聚合，DDD 的词汇更丰富，所以以后我们将继续使用 DDD 的词汇，如果你对聚合感兴趣，推荐阅读 Gojko Adzic 的文章。
+
+通过对用例的分析（LegalEntity 和 Address 是同时创建和修改），再加上 DDD 的词汇（LegalEntity 是实体也是聚合根，Address 是值对象），现在可以重新设计数据模型（也被称为领域模型）
+
+![LegalEntity 微服务 -- 更好的模型](http://www.tigerteam.dk/wp-content/uploads/2014/03/LegalEntity-Microservice-better-model.png)
+
+上图的设计中，Address 中不再包含 AddressId，因为值对象不需要 ID 来标识。
+
+LegalEntity 仍然有 LegalEntityId，并且在使用 LegalEntity 微服务时必须通过 LegalEntityId。
+
+在新的设计中，Address 服务已经废弃，只留下 "Legal Entity Micro Service"。
+
+![更好的 LegalEntity 微服务](http://www.tigerteam.dk/wp-content/uploads/2014/03/LegalEntity-microservice.png)
+
+新的设计完全解决了事务问题，因为例子中只有一个服务。还有很多可以改进的，我们还没有谈到服务间如何通信，当处理过程或用例要跨越多个聚合或服务时，确保整个服务的协调性和一致性，
+
+这篇文已经太长了，剩下的等下文再说。
