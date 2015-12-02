@@ -1,6 +1,6 @@
 Microservices: It’s not (only) the size that matters, it’s (also) how you use them – part 3
 
-> https://www.tigerteam.dk/2014/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-3/
+> https://www.tigerteam.dk/2014/microservices-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-3/
 
 前文中，我们再次描述服务（微服务）之间进行双向同步通信的问题，我们讨论了微服务使用双向同步通信造成的耦合问题实际上是分布式对象的一种变形。我们还谈及这种缺乏可信任的消息和事务导致服务失败时复杂的补偿逻辑。
 
@@ -84,4 +84,6 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 
 ![我们的方案:)](http://www.tigerteam.dk/wp-content/uploads/2014/04/asynchronous-communication.png)
 
-问题是怎样在只使用服务间异步单向通信的限制下设计你的服务或微服务（UI 和服务之间通信时另一件事，我们后面会谈到）
+问题是怎样在只使用服务间异步单向通信的限制下设计你的服务或微服务（UI 和服务之间通信时另一件事，我们后面会谈到）？
+
+下一篇我们看看如何拆分服务以及怎样让通过异步单行通信调用它们。
