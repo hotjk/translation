@@ -1,5 +1,3 @@
-
-
 Microservices: It’s not (only) the size that matters, it’s (also) how you use them – part 2
 
 > https://www.tigerteam.dk/2014/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-2/
@@ -58,7 +56,7 @@ Pat Hellands 在 "Life Beyond Distributed Transactions(交易) – An Apostate�
 
 怎么拆分数据和服务
 怎样发现数据和服务
-数据和服务间如何通信
+数据服务间如何通信
 
 如果拆分和标记数据和服务
 
