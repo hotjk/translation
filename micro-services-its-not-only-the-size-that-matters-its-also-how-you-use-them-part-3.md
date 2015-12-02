@@ -43,7 +43,45 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 基于这些特点，我们简单的对通信进行了分类：
 
 同步通信是双向通信
-![同步通信](http://www.tigerteam.dk/wp-content/uploads/2014/04/synchronous-communication.png)
-上图的同步通信方式称为请求/应答模式，典型情况下以 PRC 模式实现。
-在请求/应答模式下，服务消费者发送一个请求消息给服务提供者，在服务提供者处理请求消息时，服务消费者基本上只能等待直到收到应答或者发生错误。（有些人可能会说，消费者可以利用异步平台特性，在等待时并行的做其他调用，但这其实没有解决调用时消费者和提供者的临时耦合，在收到应答前消费者根本无法继续后面的工作。）电影的请求/应答或者说 RPC 调用流程如下图。
 
+![同步通信](http://www.tigerteam.dk/wp-content/uploads/2014/04/synchronous-communication.png)
+
+上图的同步通信方式称为 Request/Response 模式，典型情况下以 PRC 模式实现。
+在 Request/Response 模式下，服务消费者发送一个请求消息给服务提供者，在服务提供者处理请求消息时，服务消费者基本上只能等待直到收到应答或者发生错误。（有些人可能会说，消费者可以利用异步平台特性，在等待时并行的做其他调用，但这其实没有解决调用时消费者和提供者的临时耦合，在收到应答前消费者根本无法继续后面的工作。）电影的 Request/Response 或者说 RPC 调用流程如下图。
+
+![同步通信流程](http://www.tigerteam.dk/wp-content/uploads/2014/04/Sync-waits.png)
+
+如图所示，服务消费者和服务提供者之间是强耦合的，服务提供者不可用时，服务消费者也不能工作，这类临时耦合或者说运行时耦合是我们应该尽量避免的。
+
+异步通信是单向通信
+
+![异步通信](http://www.tigerteam.dk/wp-content/uploads/2014/04/asynchronous-communication.png)
+
+使用异步通信时，发送者通过传输通道发出一个消息给接收者，发送者只需要短暂的等待就可以获得消息送达的反馈，然后发送者就可以继续后面的工作。这就是单向通信的本质，典型的执行路径如下图：
+
+![异步通信流程](http://www.tigerteam.dk/wp-content/uploads/2014/04/async-waits.png)
+
+异步通信就是大家常说的消息传送，异步通信的传输通道负责从接受发送者发来的消息，并负责把消息交付给接收者（可能有多个）。可以说传输通道承担了消息交换的职责，传输通道可以非常简单（比如使用 Socket、0MQ），也可以使用带有持久化的高级分布式解决方案（比如 ActiveMQ、HornetQ、kafka 等等）。消息机制和异步通信通道提供了不同消息交换保障：交付保证和消息顺序保证。
+
+为什么异步通信不是完整的解决方案？
+
+事实上，很遗憾，异步通信不像同步通信一样容易，服务的集成模式决定了真实的耦合度。
+
+双向通信有几种形式或者变化：
+
+  远程过程调用（RPC）-- 异步通信
+  Request/Response  -- 同步通信
+  Request/Reply  -- 也被称为基于异步的同步通信。
+
+经常看到一些项目使用 Request/Reply （基于异步的同步通信）来确保服务不会产生临时耦合。说到细节就比较讨厌了，从消费者来看，大多数使用 Request/Reply 模式的应用程序，临时耦合的程度跟使用 RPC 或者 Request/Response 没有太大的区别，他们统统是双向通信的变种，都要求发送者等到应答后才能继续处理业务。
+
+![RPC 和 Request/Response -- 同步双向通信 VS. Request/Reply -- 异步双向通信](http://www.tigerteam.dk/wp-content/uploads/2014/04/RPC-Request-Response-vs-Request-Reply.png)
+
+那么结论是？
+
+结论就是服务间双向通信是问题的根源，我们把服务粒度变小（变成微服务），这个问题也不会变小。
+我们已经看到异步通信可以打破服务间的临时耦合，但是只有这种异步通信是单向时才真正起作用。
+
+![我们的方案:)](http://www.tigerteam.dk/wp-content/uploads/2014/04/asynchronous-communication.png)
+
+问题是怎样在只使用服务间异步单向通信的限制下设计你的服务或微服务（UI 和服务之间通信时另一件事，我们后面会谈到）
