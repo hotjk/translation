@@ -6,7 +6,7 @@
 
 在 [SOA – Hierarchy or organic growth?](http://www.tigerteam.dk/2014/soa-hierarchy-or-organic-growth/) 亦文中谈到了分层 SOA 的问题，在 [SOA : synchronous communication, data ownership and coupling](http://www.tigerteam.dk/2014/soa-synchronous-communication-data-ownership-and-coupling/) 一文中我们提到了四个面向服务架构的原则，还特别关注了服务间双向通信时的服务边界和自治问题，有了这些背景，让我们开始本文的主题。
 
-如文章标题所言，我们讨论的是 Microservices（微服务），微服务架构是对应 Monolithic（一体化）架构的另一种架构方案。就像 SOA 这个概念缺乏明确定义一样，微服务也没有一个明确的定义。目前大家能达成的共识是微服务应该是[小的](http://oredev.org/2013/wed-fri-conference/implementing-micro-service-architectures)，并且服务是可以独立部署的。很多经验法则说微服务应该在 10 到 100 行代码，我觉得用代码行数作为评判服务粒度的标准有点儿无厘头。
+如文章标题所言，我们讨论的是 Microservices（微服务），微服务架构是对应 Monolithic（一体化）架构的另一种架构方案。就像 SOA 这个概念缺乏明确定义一样，微服务也没有一个明确的定义。目前大家能达成的共识是微服务应该是[小的](http://oredev.org/2013/wed-fri-conference/implementing-micro-service-architectures)，并且服务是可以独立部署的。很多经验法则说微服务应该在 10 到 100 行代码，我觉得用代码行数来作为评判服务粒度的标准有点儿恐怖。
 
 我们缺少一种准则来指导我们从业务范围和集成方式来设计微服务。没有这种思想，在混杂的业务中设计合适的微服务就像从谷糠中筛选麦子一样困难，并且很容易受到分层 SOA 反模式（下图）的诱惑，最终走到经验法则的老路上。
 
