@@ -1,10 +1,10 @@
 Microservices: It’s not (only) the size that matters, it’s (also) how you use them – part 5
 
 [第一部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-1.md)
-[第二部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-1.md)
-[第三部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-1.md)
-[第四部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-1.md)
-[第五部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-1.md)
+[第二部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-2.md)
+[第三部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-3.md)
+[第四部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-4.md)
+[第五部分](https://github.com/hotjk/translation/blob/master/microservices/micro-services-its-not-only-the-size-that-matters-its-also-how-you-use-them-part-5.md)
 
 本文翻译自 Jeppe Cramon 在 [tigerteam.dk](https://www.tigerteam.dk) 的博客文章，原文地址：
 
