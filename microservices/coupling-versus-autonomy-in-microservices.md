@@ -49,6 +49,7 @@
 ### 4. PUBLISH-SUBSCRIBE WITH COMMANDS/QUERIES
 
 ![PUBLISH-SUBSCRIBE WITH COMMANDS/QUERIES](http://blog.xebia.com/wp-content/uploads/2015/03/psc.png)
+
 配送服务自己注册为能够配送货物的服务，接受所有想要配送货物的命令，配送服务不需要意识到配送命令的来源，同样订单服务业不知道那些服务将处理配送，在这个意义上说，他们是松散耦合的，不过，订单服务知道既然发送了配送命令，订单必须被配送的事实，这确实让耦合更强了。
 
 ### 结论
