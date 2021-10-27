@@ -16,7 +16,7 @@
 
 传统的分层 SOA 里的服务是微服务么？
 
-![分层 SOA 也是微服务架构？](https://www.tigerteam.dk/wp-content/uploads/2014/01/Layered-SOA.png "分层 SOA 也是微服务架构？")
+![分层 SOA 也是微服务架构？](https://github.com/hotjk/translation/blob/master/microservices/Image/Layered-SOA.png?raw=true)
 
 传统的分层面向对象代码里，实体/数据服务（Entity/Data Services）是大致上跟仓储/数据访问对象（Repository/Data Access Object）功能类似的一层很薄的服务，实体服务（Entity Service）就是关系型数据库之上包了一层薄薄的壳。依据使用的编程语言和框架的差异，仓储（Repository）被大约 10 行到 300 行代码包装成 REST 或 Web 服务。符合微服务代码行数评判规则。
 
@@ -30,7 +30,7 @@
 
 如果我们竭尽所能地分解服务为非常小的服务，使用双向调用时延迟时间将非常可怕。如果微服务的焦点放在服务的大小上而不是使用模式上，不难想象我们将有一个服务调用星状图，一个应用调用一个服务，服务接着调用一堆小的服务，这些服务接着调用另一堆服务，这种使用模式甚至还会造成服务的循环调用。
 
-![微服务同步双向通信星状图。服务调用服务，然后被调用服务又调用其他服务，然后……](https://www.tigerteam.dk/wp-content/uploads/2014/02/Microservices_star.png "微服务同步双向通信星状图。服务调用服务，然后被调用服务又调用其他服务，然后……")
+![微服务同步双向通信星状图。服务调用服务，然后被调用服务又调用其他服务，然后……](https://github.com/hotjk/translation/blob/master/microservices/Image/Microservices_star.png?raw=true)
 
 我们尝试分解服务到非常小的粒度，造成一个服务需要再调用很多服务才能完成自己的任务，这是因为他们都想要对方的数据和功能。
 
@@ -44,7 +44,7 @@
 
 耦合有导致级联副作用的倾向。当修改服务协议时，所用使用该服务的其他服务都要跟着修改。当服务不可用时，所有依赖于该服务的其他服务也不可用了。当一个服务更新数据失败，所在 Process Services 的其他服务也需要应对更新失败的影响。
 
-![错误是在服务收到消息执行更新操作前发生的还是更新操作后发生的？](http://www.tigerteam.dk/wp-content/uploads/2014/02/Service-call-failing.png "错误是在服务收到消息执行更新操作前发生的还是更新操作后发生的？")
+![错误是在服务收到消息执行更新操作前发生的还是更新操作后发生的？](https://github.com/hotjk/translation/blob/master/microservices/Image/Service-call-failing.png?raw=true)
 
 上图中从客户端发起服务的调用，或者从服务中调用另一个服务，因为使用双向通信，客户端发送一个请求消息给服务，服务收到请求并执行一些处理，比如更新数据库，处理完成后，服务发送一个应答消息给客户端表明处理的结果。通信经由网络，比如 HTTP 调用或者 Queue 消息。比起我们在 Monolithic 开发方式下的内存方法调用，网络请求是缓慢且不稳定的。
 
@@ -63,7 +63,7 @@
 如果客户端尝试再次调用，服务必须实现允许对同一笔业务多次调用，或者接受同一笔业务相同的请求消息，仍然保证业务只被执行一次，也就是说服务必须是[幂等的](http://en.wikipedia.org/wiki/Idempotence#Computer_science_meaning)。
 如果要对多个服务进行一系列更新操作，我们必须面对一个巨大的一致性问题，因为我们没有也不应该使用分布式事务来协调这些更新。就像我们在 [SOA: synchronous communication, data ownership and coupling](http://www.tigerteam.dk/2014/soa-synchronous-communication-data-ownership-and-coupling/) 一文中谈到的，双向通信的补偿逻辑既不是微不足道的也不是简单的。
 
-![同步双向通信方式集成事务补偿](http://www.tigerteam.dk/wp-content/uploads/2014/02/synchronous-SOA-orchestration.png "同步双向通信方式集成事务补偿")
+![同步双向通信方式集成事务补偿](https://github.com/hotjk/translation/blob/master/microservices/Image/synchronous-SOA-orchestration.png?raw=true)
 
 假设一种极端的微服务架构，每个服务只负责实体的一个属性（比如姓名、地址、邮编、城市等等），延迟时间会是一个巨大的问题，稳定性、协调服务调用和补偿也会是巨大的问题。我们一定是没找到正确的服务设计指导准则。
 
@@ -81,14 +81,14 @@
 - 服务依赖其他服务减少了自身的自治能力，也让服务更不可靠
 - 所有这些导致在没有可靠消息和事务的情况下复杂的逻辑补偿
 
-![可复用的服务，双向同步通信和耦合](http://www.tigerteam.dk/wp-content/uploads/2014/03/reusable-services-and-coupling.png "可复用的服务，双向同步通信和耦合")
+![可复用的服务，双向同步通信和耦合](https://github.com/hotjk/translation/blob/master/microservices/Image/reusable-services-and-coupling.png?raw=true)
 
 如果我们组合同步双向通信的小服务也好，微服务也好，依据 1 class = 1 service 的建模方式，我们实际上倒退回了 90 年代的 Corba、J2EE、分布式对象的年代。
 不幸的是，新一代的开发人员并没有分布式对象的使用经验，他们没参与过此类项目，也不了解这些想法是多么可怕，他们在重复这段历史，只是换了一些新的技术，比如用 HTTP 代替了 RMI 和 IIOP。
 
 Jay Kreps 非常恰当的概括了目前微服务使用双向通信的方式：
 
-![Jay Kreps - 微服务 == 潮人的分布式对象](http://www.tigerteam.dk/wp-content/uploads/2014/03/Jay-Kreps-Microservices-equals-distributed-objects.png "Jay Kreps - 微服务 == 潮人的分布式对象")
+![Jay Kreps - 微服务 == 潮人的分布式对象](https://github.com/hotjk/translation/blob/master/microservices/Image/Jay-Kreps-Microservices-equals-distributed-objects.png?raw=true)
 
 仅仅因为微服务倾向于使用 HTTP、JSON、REST 并没有填补远程通信的劣势。新手常常忽略的分布式计算的劣势可以归纳为 8 个分布式计算谬论：
 
@@ -117,7 +117,7 @@ Pat Hellands 在 [Life Beyond Distributed Transactions – An Apostate’s Opini
 - 2 阶段/3 阶段/ X 阶段提交的分布式事务是脆弱的设计。即使 X 阶段提交分布式事务以牺牲性能为代价解决了协调跨事务边界更新的问题。
 仍然还有很多将 X 阶段提交留着未知状态的错误情景。（比如两阶段提交在提交阶段被中断，意味着一些参与者已经承诺了他们的修改，而另一些则没有。如果只有一个参与者失败了，提交将处于不可用的尴尬状态）
 
-![两阶段提交协议的流程](http://www.tigerteam.dk/wp-content/uploads/2014/03/2-phase-commit-protocol-flow.png "两阶段提交协议的流程")
+![两阶段提交协议的流程](https://github.com/hotjk/translation/blob/master/microservices/Image/2-phase-commit-protocol-flow.png?raw=true)
 
 如果分布式事务不是解决方案，解决方案是什么？
 
@@ -139,7 +139,7 @@ Pat Helland 认为，数据必须被集中成实体，实体需要限定大小�
 客户想确保最大化的重用两个领域概念，LegalEntity 和 Address，任何 LegalEntity 需要使用地址的场合都要用到 Address，比如家庭地址、工作地址等等。为了协调创建、更新、读取以及确保重用，引入了一个 Task Service，"Legal Entity Task Service" 将会协调 "Legal Entity Micro Service" 和 "Address Micro Service"，我们选择让 "Legal Entity Task Service" 是承担 Task Service 的角色，但是这并没有解决我们要讨论的最重要的事务问题。
 创建一个 LegalEntity，比如个人或者公司，我们首先通过 "Legal Entity Micro Service" 生成一个 LegalEntity，同时使用 "Address Micro Service" 生成了一个或多个 Address（"Legal Entity Task Service" 中的 CreateLegalEntity() 决定了创建几个 Address），每个 Address 都有从 "Address Micro Service" 的 CreateAddress() 方法返回的 AddressId，"Legal Entity Micro Service" 的 CreateLogalEntity() 方法通过 "Legal Entity Micro Service" 里的 AssociateLegalEntityWithAddress() 方法将 LegalEntityId 和 AddressId 关联起来。
 
-![不正确的微服务](http://www.tigerteam.dk/wp-content/uploads/2014/03/Bad-microservices-Create.png "不正确的微服务")
+![不正确的微服务](https://github.com/hotjk/translation/blob/master/microservices/Image/Bad-microservices-Create.png?raw=true)
 
 从上面的序列图，我们清楚的看到了各种级别的深度的耦合，如果 "Address Micro Service" 没有应答，就不能创建 LegalEntity，这种方案的延迟很高，因为有太多的远程调用，使用并行调用可以减少延迟，但是这种小的优化解决不了问题的本质，事务问题仍然存在。
 
@@ -157,7 +157,7 @@ LegalEntity 和 Address 服务的设计需要架构团队设计一个合乎逻�
 
 数据模型看起来像这样：
 
-![不好的微服务数据模型](http://www.tigerteam.dk/wp-content/uploads/2014/03/Bad-microservices-data-model.png "不好的微服务数据模型")
+![不好的微服务数据模型](https://github.com/hotjk/translation/blob/master/microservices/Image/Bad-microservices-data-model.png?raw=true)
 
 如图中模型，LegalEntity 和 Address 的对应关系是共享直接关联，这就表示两个 LegalEntity 可以共享一个 Address 实例，实际业务中这种情况不会发生，因为两者是一种直接组合关联，更像一种父子关系。如果 LegalEntity 对象 被删除，Address 对象也就没有存储的必要了，父子关系表达了 LegalEntity 和 Address 密切的属于一个整体，他们被共同创造，一起改变，一起被使用。
 这意味着我们不应该有两个实体，实际上只有一个实体，LegalEntity，一个或多个 Address 对象紧密的与实体关联。Pat Hellands 的实体一词是从领域驱动设计（DDD）中得来，DDD 还包括更丰富的词汇：
@@ -173,13 +173,13 @@ LegalEntity 和 Address 服务的设计需要架构团队设计一个合乎逻�
 
 通过对用例的分析（LegalEntity 和 Address 是同时创建和修改），再加上 DDD 的词汇（LegalEntity 是实体也是聚合根，Address 是值对象），现在可以重新设计数据模型（也被称为领域模型）。
 
-![LegalEntity 微服务 -- 更好的模型](http://www.tigerteam.dk/wp-content/uploads/2014/03/LegalEntity-Microservice-better-model.png "LegalEntity 微服务 -- 更好的模型")
+![LegalEntity 微服务 -- 更好的模型](https://github.com/hotjk/translation/blob/master/microservices/Image/LegalEntity-Microservice-better-model.png?raw=true)
 
 上图的设计中，Address 中不再包含 AddressId，因为值对象不需要 ID 来标识。
 LegalEntity 仍然有 LegalEntityId，并且必须通过 LegalEntityId 来使用 LegalEntity 微服务。
 在新的设计中，Address 服务已经废弃，只留下 "Legal Entity Micro Service"。
 
-![更好的 LegalEntity 微服务](http://www.tigerteam.dk/wp-content/uploads/2014/03/LegalEntity-microservice.png "更好的 LegalEntity 微服务")
+![更好的 LegalEntity 微服务](https://github.com/hotjk/translation/blob/master/microservices/Image/LegalEntity-microservice.png?raw=true)
 
 新的设计完全解决了事务问题，因为例子中只有一个服务。还有很多可以改进的，我们还没有谈到服务间如何通信，以及处理过程或用例要跨越多个聚合或服务时，如何确保整个服务的协调性和一致性，
 
@@ -214,7 +214,7 @@ LegalEntity 仍然有 LegalEntityId，并且必须通过 LegalEntityId 来使用
 - 服务依赖其他服务减少了自身的自治能力，也让服务更不可靠
 - 所有这些导致在没有可靠消息和事务的情况下复杂的逻辑补偿
 
-![服务复用在双向同步通信方式下的耦合](http://www.tigerteam.dk/wp-content/uploads/2014/03/reusable-services-and-coupling.png "服务复用在双向同步通信方式下的耦合")
+![服务复用在双向同步通信方式下的耦合](https://github.com/hotjk/translation/blob/master/microservices/Image/reusable-services-and-coupling.png?raw=true)
 
 ### 如果同步通信不是办法，那么是不是应该用异步通信？
 
@@ -227,22 +227,22 @@ LegalEntity 仍然有 LegalEntityId，并且必须通过 LegalEntityId 来使用
 
 ### 同步通信是双向通信
 
-![同步通信](http://www.tigerteam.dk/wp-content/uploads/2014/04/synchronous-communication.png "同步通信")
+![同步通信](https://github.com/hotjk/translation/blob/master/microservices/Image/synchronous-communication.png?raw=true)
 
 上图的同步通信方式称为 Request/Response 模式，典型情况下以 PRC 模式实现。
 在 Request/Response 模式下，服务消费者发送一个请求消息给服务提供者，在服务提供者处理请求消息时，服务消费者基本上只能等待直到收到应答或者发生错误（有些人可能会说，消费者可以利用异步平台特性，在等待时并行的做其他调用，但这其实没有解决调用时消费者和提供者的时间耦合，在收到应答前消费者根本无法继续后面的工作）。典型的 Request/Response 或者 RPC 调用流程如下图：
 
-![同步通信流程](http://www.tigerteam.dk/wp-content/uploads/2014/04/Sync-waits.png "同步通信流程")
+![同步通信流程](https://github.com/hotjk/translation/blob/master/microservices/Image/Sync-waits.png?raw=true)
 
 如图所示，服务消费者和服务提供者之间是强耦合的，服务提供者不可用时，服务消费者也不能工作，这类时间耦合或者说运行时耦合是我们应该尽量避免的。
 
 ### 异步通信是单向通信
 
-![异步通信](http://www.tigerteam.dk/wp-content/uploads/2014/04/asynchronous-communication.png "异步通信")
+![异步通信](https://github.com/hotjk/translation/blob/master/microservices/Image/asynchronous-communication.png?raw=true)
 
 使用异步通信时，发送者通过传输通道发出一个消息给接收者，发送者只需要短暂的等待就可以获得消息送达的反馈，然后发送者就可以继续后面的工作。这就是单向通信的本质，典型的执行路径如下图：
 
-![异步通信流程](http://www.tigerteam.dk/wp-content/uploads/2014/04/async-waits.png "异步通信流程")
+![异步通信流程](https://github.com/hotjk/translation/blob/master/microservices/Image/async-waits.png?raw=true)
 
 异步通信就是大家常说的消息传送，异步通信的传输通道负责接受发送者发来的消息，并负责把消息交付给接收者（可能有多个）。可以说传输通道承担了消息交换的职责，传输通道可以非常简单（比如使用 Socket、0MQ），也可以使用带有持久化的高级分布式解决方案（比如 ActiveMQ、HornetQ、kafka 等等）。消息机制和异步通信通道提供了不同消息交换保障：交付保证和消息顺序保证。
 
@@ -258,14 +258,14 @@ LegalEntity 仍然有 LegalEntityId，并且必须通过 LegalEntityId 来使用
 
 经常看到一些项目使用 Request/Reply （基于异步的同步通信）来确保服务不会产生时间耦合。说到细节就比较讨厌了，从消费者来看，大多数使用 Request/Reply 模式的应用程序，时间耦合的程度跟使用 RPC 或者 Request/Response 没有太大的区别，他们统统是双向通信的变种，都要求发送者等到应答后才能继续处理业务。
 
-![RPC 和 Request/Response -- 同步双向通信 VS. Request/Reply -- 异步双向通信](http://www.tigerteam.dk/wp-content/uploads/2014/04/RPC-Request-Response-vs-Request-Reply.png "RPC 和 Request/Response -- 同步双向通信 VS. Request/Reply -- 异步双向通信")
+![RPC 和 Request/Response -- 同步双向通信 VS. Request/Reply -- 异步双向通信](https://github.com/hotjk/translation/blob/master/microservices/Image/RPC-Request-Response-vs-Request-Reply.png?raw=true)
 
 ### 那么结论是？
 
 结论就是服务间双向通信是问题的根源，我们把服务粒度变小（变成微服务），这个问题也不会变小。
 我们已经看到异步通信可以打破服务间的时间耦合，但是只有这种异步通信是单向时才真正起作用。
 
-![我们的方案:)](http://www.tigerteam.dk/wp-content/uploads/2014/04/asynchronous-communication.png "我们的方案:)")
+![我们的方案:)](https://github.com/hotjk/translation/blob/master/microservices/Image/asynchronous-communication.png?raw=true)
 
 问题是怎样在只使用服务间异步单向通信的限制下设计你的服务或微服务（UI 和服务之间通信时另一件事，我们后面会谈到）？
 
@@ -302,11 +302,11 @@ Monolith 感觉好极了，特别是在项目初期，问题很少，复杂度�
 
 硬币的另一面是高耦合和低内聚的风险，Monolith 很容易慢慢的变大，因为他承担了太多的职责，因为太容易使用已有的功能和数据。
 
-![Monolith 数据模型慢慢变大最终因为缺乏内聚而变得混乱](http://www.tigerteam.dk/wp-content/uploads/2014/02/model-growth.png "Monolith 数据模型慢慢变大最终因为缺乏内聚而变得混乱")
+![Monolith 数据模型慢慢变大最终因为缺乏内聚而变得混乱](https://github.com/hotjk/translation/blob/master/microservices/Image/model-growth.png?raw=true)
 
 这就是 Monolith 走下坡路：
 
-![Monolith 随着复杂度下滑](http://www.tigerteam.dk/wp-content/uploads/2014/05/monolith-slippery-slope.png "Monolith 随着复杂度下滑")
+![Monolith 随着复杂度下滑](https://github.com/hotjk/translation/blob/master/microservices/Image/monolith-slippery-slope.png?raw=true)
 
 Monolith 还有几个劣势：
 
@@ -328,11 +328,11 @@ Monolith 还有几个劣势：
 
 问题是大多数 Monolith 系统已经发展到了包含许多不同类型的业务。这意味着公司最终不得不有多个主系统，这些系统拥有很多相似的业务数据，每种业务都没有真正的单一源头。
 
-![Monolith 集成成堆的 Web Service](http://www.tigerteam.dk/wp-content/uploads/2014/05/integration-by-a-bunch-of-webservices.png "Monolith 集成成堆的 Web Service")
+![Monolith 集成成堆的 Web Service](https://github.com/hotjk/translation/blob/master/microservices/Image/integration-by-a-bunch-of-webservices.png?raw=true)
 
 如果我们刚接手一个 Monolith 系统，想要拆分成小一点的服务，我们还需要处理 Monolith 系统的内部耦合，典型的内部耦合包括集成、直接的方法调用、SQL Join 等等。如果我们只是简单的创建服务只会让事情更糟。
 
-![Monolith 分拆成服务](http://www.tigerteam.dk/wp-content/uploads/2014/05/monolith-sliced-up-into-microservices.png "Monolith 分拆成服务")
+![Monolith 分拆成服务](https://github.com/hotjk/translation/blob/master/microservices/Image/monolith-sliced-up-into-microservices.png?raw=true)
 
 所有这些都导致了服务边界模糊，一些服务会很单薄并且会过度的依赖其他服务的数据和功能。在我看来，这不是松耦合，也许恰恰相反。
 
@@ -343,7 +343,7 @@ Monolith 还有几个劣势：
 
 在旧有的 Monolith 系统，我们可能已经收集了关于零售领域的所有的功能和数据，可能包含的功能区有，商品目录、销售、库存、配送、结账，每一个功能区可以被叫做子域或者业务功能：
 
-![零售领域的功能区](http://www.tigerteam.dk/wp-content/uploads/2014/05/functional-areas.png "零售领域的功能区")
+![零售领域的功能区](https://github.com/hotjk/translation/blob/master/microservices/Image/functional-areas.png?raw=true)
 
 零售业务就是销售商品，所以每个功能区或者说子域都会以一些方式牵扯到商品（Product）这个领域概念：
 
@@ -376,7 +376,7 @@ Monolith 还有几个劣势：
 
 服务模型和边界看起来是这样（简化版）
 
-![简化的服务数据模型](http://www.tigerteam.dk/wp-content/uploads/2014/05/simple-service-data-models.png "简化的服务数据模型")
+![简化的服务数据模型](https://github.com/hotjk/translation/blob/master/microservices/Image/simple-service-data-models.png?raw=true)
 
 上面的服务领域模型展示了两个高内聚、低耦合、简单清晰的数据模型。两者唯一的耦合是订单行通过商品 ID 引用了商品（记得本文第二部分说过聚合间通过彼此 ID 引用）。
 网上商城（消费许多服务的客户端）负责显示销售的商品，客户购买商品的价格，当用户塞满购物筐，网上商城会发送包含用户想购买的商品的数量、价格、商品 ID 的命令消息给销售服务。后面我们会看到我们怎样使用复合式 UI 的优势来降低网上商城的耦合，现在我们只是假设网上商城这个客户端使用双向通信方式逐个调用服务。
@@ -409,11 +409,11 @@ Monolith 还有几个劣势：
 
 我们可以让销售服务通过消息通道（比如发布/订阅风格）监听这些事件，并允许销售服务建立其内部的商品对象，并将自己关心的数据放入新的商品对象：
 
-![通过事件进行数据复制](http://www.tigerteam.dk/wp-content/uploads/2014/05/data-duplication-over-events.png "通过事件进行数据复制")
+![通过事件进行数据复制](https://github.com/hotjk/translation/blob/master/microservices/Image/data-duplication-over-events.png?raw=true)
 
 对应的服务数据模型：
 
-![包含时间和数据复制的服务模型](http://www.tigerteam.dk/wp-content/uploads/2014/05/Data-duplication.png "包含时间和数据复制的服务模型")
+![包含时间和数据复制的服务模型](https://github.com/hotjk/translation/blob/master/microservices/Image/Data-duplication.png?raw=true)
 
 使用数据复制方案获得以下优势：
 
@@ -438,7 +438,7 @@ Monolith 还有几个劣势：
 
 让我们看看怎样使用事件来驱动订单处理流程。客户在网上商城按下接受按钮时，触发一个 AcceptOrder 命令消息发送（通常是异步）给销售服务。
 
-![OrderAccepted 事件驱动订单处理流程](http://www.tigerteam.dk/wp-content/uploads/2014/05/OrderAccepted1.png "OrderAccepted 事件驱动订单处理流程")
+![OrderAccepted 事件驱动订单处理流程](https://github.com/hotjk/translation/blob/master/microservices/Image/OrderAccepted1.png?raw=true)
 
 AccpetOrder 命令导致订单状态改变，订单状态被转换为 Accepted 状态。
 这种状态改变通过 OrderAccpeted 事件传达给所有对此感兴趣的服务，我们在描述一个订单已经被接受，这件事是不可撤销的（我们可以补偿，但是不能回滚这次改变）。
@@ -451,7 +451,7 @@ EDA 服务自己决定当事件发生时要做什么，当我们需要协调多�
 
 在下面的例子中，订单处理服务发送 OrderReadyForShipping 事件之前等待两个事件：OrderAccepted 和 CustomerBilled，两个事件需要包含足够的信息，表达出他们是同一个订单处理过程，可以通过 OrderID，也可以通过其他形式的相关 ID，这种服务间使用事件的协作方式也被称作编排，可以被看成对更传统的编排的补充（真实的解决方案会联合使用两种编排方式）。
 
-![编排的订单处理过程](http://www.tigerteam.dk/wp-content/uploads/2014/05/orderfulfilment-process.png "编排的订单处理过程")
+![编排的订单处理过程](https://github.com/hotjk/translation/blob/master/microservices/Image/orderfulfilment-process.png?raw=true)
 
 事件驱动架构已经说的够多了，这篇已经太长了，服务边界定义放到下次吧。
 
@@ -474,7 +474,7 @@ EDA 服务自己决定当事件发生时要做什么，当我们需要协调多�
 
 业务功能是我们开发的软件的根基，Dan North 说过下面这段话：
 
-![Dan North：业务功能是资产](http://www.tigerteam.dk/wp-content/uploads/2015/02/dan-north-on-business-capabilities.png "Dan North：业务功能是资产")
+![Dan North：业务功能是资产](https://github.com/hotjk/translation/blob/master/microservices/Image/dan-north-on-business-capabilities.png?raw=true)
 
 最后 Udi Dahan 在 [The Known Unknowns of SOA](http://www.udidahan.com/2010/11/15/the-known-unknowns-of-soa/) 一文中说明了为什么他觉得服务应该是自治的，并成为特定业务功能的技术权威。
 
@@ -503,11 +503,11 @@ EDA 服务自己决定当事件发生时要做什么，当我们需要协调多�
 
 太抽象了，我么举个复合 UI 的例子：
 
-![亚马逊的复合 UI](http://www.tigerteam.dk/wp-content/uploads/2015/02/Composite-UI-Amazon.png "亚马逊的复合 UI")
+![亚马逊的复合 UI](https://github.com/hotjk/translation/blob/master/microservices/Image/Composite-UI-Amazon.png?raw=true)
 
 组合 UI 区块的工作可以在客户端完成也可以在服务端完成。这是思考方式是每个服务渲染它负责的 UI 成为网上商城页面上一个特定的 DIV：
 
-![HTML 组合](http://www.tigerteam.dk/wp-content/uploads/2015/03/HTML-Composition.png "HTML 组合")
+![HTML 组合](https://github.com/hotjk/translation/blob/master/microservices/Image/HTML-Composition.png?raw=true)
 
 更新：如果组合发生在客户端，那么客户端 UI 组件和服务端对应的部分（比如一个 REST 接口）通常包含双向通信（很少使用发布/订阅模式，除非你希望服务器生成事件推到客户端）。为了让 UI 有应答，典型情况下客户端 UI 组件和服务端对应的部分使用基于异步的同步双向通信，比如使用带有 Javascript 回调的异步 Ajax 调用。
 
@@ -518,7 +518,7 @@ EDA 服务自己决定当事件发生时要做什么，当我们需要协调多�
 
 缺点是给定的服务需要能够提供它的 UI 区块给所有可能的应用程序，比如 iOS 应用、后台 .Net 应用，基于 Java 的网上商城等等，下面的使用组合方式的例子中多个服务联合渲染/打印出发票：
 
-![复合 UI 发票例子](http://www.tigerteam.dk/wp-content/uploads/2015/02/Composite-Invoice.png "复合 UI 发票例子")
+![复合 UI 发票例子](https://github.com/hotjk/translation/blob/master/microservices/Image/Composite-Invoice.png?raw=true)
 
 我觉得，复合 UI 是自治服务真正强大的场合，从多个服务渲染内容却不会让服务之间耦合。你获得在各个层级封装良好的服务，我们展示出来的接口/协议很少暴露服务的数据和功能，服务通常暴露给服务的消费者，驱动本地 IT 操作接口（第三方/遗留系统集成）、事件（典型情况下只需要包含发生了什么事以及变更影响的聚合 ID）、几个对外暴露的命令，当然还有我们的 UI 区块，除了这些只有非常少的协议/接口暴露给生态系统。
 
@@ -569,7 +569,7 @@ EDA 服务自己决定当事件发生时要做什么，当我们需要协调多�
 
 这并不意味着微服务只需要关注上面的提到的这一点，基于性能、可扩展性、一致性、可用性的需求，我们会选择在一个微服务里绑定更多的概念进而把微服务拆成更小的部分（可以理解为把服务多维度的拆解成更小的微服务）。
 
-![逻辑 SOA 组件](https://www.tigerteam.dk/wp-content/uploads/2015/02/Logical-SOA-components.png "逻辑 SOA 组件")
+![逻辑 SOA 组件](https://github.com/hotjk/translation/blob/master/microservices/Image/Logical-SOA-components.png?raw=true)
 
 并且没有强制要求服务的内部组件（微服务）只能使用事件来进行通信，绝对可能也有理由考虑那些可以应对分布式数据的存储的平台，比如 [NuoDB](http://www.nuodb.com/)
 
@@ -590,6 +590,6 @@ EDA 服务自己决定当事件发生时要做什么，当我们需要协调多�
 
 Jay Kreps 描述了这个问题：
 
-![软件主要是人力资本，失去团队比丢失代码更可怕](http://www.tigerteam.dk/wp-content/uploads/2015/03/software-is-mostly-human-capital.png "软件主要是人力资本，失去团队比丢失代码更可怕")
+![软件主要是人力资本，失去团队比丢失代码更可怕](https://github.com/hotjk/translation/blob/master/microservices/Image/software-is-mostly-human-capital.png?raw=true)
 
 这篇文章到此为止，后面我们希望谈谈怎样集成遗留系统或第三方应用。

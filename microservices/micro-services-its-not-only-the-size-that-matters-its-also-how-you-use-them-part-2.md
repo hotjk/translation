@@ -20,14 +20,14 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 - 服务依赖其他服务减少了自身的自治能力，也让服务更不可靠
 - 所有这些导致在没有可靠消息和事务的情况下复杂的逻辑补偿
 
-![可复用的服务，双向同步通信和耦合](http://www.tigerteam.dk/wp-content/uploads/2014/03/reusable-services-and-coupling.png "可复用的服务，双向同步通信和耦合")
+![可复用的服务，双向同步通信和耦合](https://github.com/hotjk/translation/blob/master/microservices/Image/reusable-services-and-coupling.png?raw=true)
 
 如果我们组合同步双向通信的小服务也好，微服务也好，依据 1 class = 1 service 的建模方式，我们实际上倒退回了 90 年代的 Corba、J2EE、分布式对象的年代。
 不幸的是，新一代的开发人员并没有分布式对象的使用经验，他们没参与过此类项目，也不了解这些想法是多么可怕，他们在重复这段历史，只是换了一些新的技术，比如用 HTTP 代替了 RMI 和 IIOP。
 
 Jay Kreps 非常恰当的概括了目前微服务使用双向通信的方式：
 
-![Jay Kreps - 微服务 == 潮人的分布式对象](http://www.tigerteam.dk/wp-content/uploads/2014/03/Jay-Kreps-Microservices-equals-distributed-objects.png "Jay Kreps - 微服务 == 潮人的分布式对象")
+![Jay Kreps - 微服务 == 潮人的分布式对象](https://github.com/hotjk/translation/blob/master/microservices/Image/Jay-Kreps-Microservices-equals-distributed-objects.png?raw=true)
 
 仅仅因为微服务倾向于使用 HTTP、JSON、REST 并没有填补远程通信的劣势。新手常常忽略的分布式计算的劣势可以归纳为 8 个分布式计算谬论：
 
@@ -56,7 +56,7 @@ Pat Hellands 在 [Life Beyond Distributed Transactions – An Apostate’s Opini
 - 2 阶段/3 阶段/ X 阶段提交的分布式事务是脆弱的设计。即使 X 阶段提交分布式事务以牺牲性能为代价解决了协调跨事务边界更新的问题。
 仍然还有很多将 X 阶段提交留着未知状态的错误情景。（比如两阶段提交在提交阶段被中断，意味着一些参与者已经承诺了他们的修改，而另一些则没有。如果只有一个参与者失败了，提交将处于不可用的尴尬状态）
 
-![两阶段提交协议的流程](http://www.tigerteam.dk/wp-content/uploads/2014/03/2-phase-commit-protocol-flow.png "两阶段提交协议的流程")
+![两阶段提交协议的流程](https://github.com/hotjk/translation/blob/master/microservices/Image/2-phase-commit-protocol-flow.png?raw=true)
 
 如果分布式事务不是解决方案，解决方案是什么？
 
@@ -78,7 +78,7 @@ Pat Helland 认为，数据必须被集中成实体，实体需要限定大小�
 客户想确保最大化的重用两个领域概念，LegalEntity 和 Address，任何 LegalEntity 需要使用地址的场合都要用到 Address，比如家庭地址、工作地址等等。为了协调创建、更新、读取以及确保重用，引入了一个 Task Service，"Legal Entity Task Service" 将会协调 "Legal Entity Micro Service" 和 "Address Micro Service"，我们选择让 "Legal Entity Task Service" 是承担 Task Service 的角色，但是这并没有解决我们要讨论的最重要的事务问题。
 创建一个 LegalEntity，比如个人或者公司，我们首先通过 "Legal Entity Micro Service" 生成一个 LegalEntity，同时使用 "Address Micro Service" 生成了一个或多个 Address（"Legal Entity Task Service" 中的 CreateLegalEntity() 决定了创建几个 Address），每个 Address 都有从 "Address Micro Service" 的 CreateAddress() 方法返回的 AddressId，"Legal Entity Micro Service" 的 CreateLogalEntity() 方法通过 "Legal Entity Micro Service" 里的 AssociateLegalEntityWithAddress() 方法将 LegalEntityId 和 AddressId 关联起来。
 
-![不正确的微服务](http://www.tigerteam.dk/wp-content/uploads/2014/03/Bad-microservices-Create.png "不正确的微服务")
+![不正确的微服务](https://github.com/hotjk/translation/blob/master/microservices/Image/Bad-microservices-Create.png?raw=true)
 
 从上面的序列图，我们清楚的看到了各种级别的深度的耦合，如果 "Address Micro Service" 没有应答，就不能创建 LegalEntity，这种方案的延迟很高，因为有太多的远程调用，使用并行调用可以减少延迟，但是这种小的优化解决不了问题的本质，事务问题仍然存在。
 
@@ -96,7 +96,7 @@ LegalEntity 和 Address 服务的设计需要架构团队设计一个合乎逻�
 
 数据模型看起来像这样：
 
-![不好的微服务数据模型](http://www.tigerteam.dk/wp-content/uploads/2014/03/Bad-microservices-data-model.png "不好的微服务数据模型")
+![不好的微服务数据模型](https://github.com/hotjk/translation/blob/master/microservices/Image/Bad-microservices-data-model.png?raw=true)
 
 如图中模型，LegalEntity 和 Address 的对应关系是共享直接关联，这就表示两个 LegalEntity 可以共享一个 Address 实例，实际业务中这种情况不会发生，因为两者是一种直接组合关联，更像一种父子关系。如果 LegalEntity 对象 被删除，Address 对象也就没有存储的必要了，父子关系表达了 LegalEntity 和 Address 密切的属于一个整体，他们被共同创造，一起改变，一起被使用。
 这意味着我们不应该有两个实体，实际上只有一个实体，LegalEntity，一个或多个 Address 对象紧密的与实体关联。Pat Hellands 的实体一词是从领域驱动设计（DDD）中得来，DDD 还包括更丰富的词汇：
@@ -112,13 +112,13 @@ LegalEntity 和 Address 服务的设计需要架构团队设计一个合乎逻�
 
 通过对用例的分析（LegalEntity 和 Address 是同时创建和修改），再加上 DDD 的词汇（LegalEntity 是实体也是聚合根，Address 是值对象），现在可以重新设计数据模型（也被称为领域模型）。
 
-![LegalEntity 微服务 -- 更好的模型](http://www.tigerteam.dk/wp-content/uploads/2014/03/LegalEntity-Microservice-better-model.png "LegalEntity 微服务 -- 更好的模型")
+![LegalEntity 微服务 -- 更好的模型](https://github.com/hotjk/translation/blob/master/microservices/Image/LegalEntity-Microservice-better-model.png?raw=true)
 
 上图的设计中，Address 中不再包含 AddressId，因为值对象不需要 ID 来标识。
 LegalEntity 仍然有 LegalEntityId，并且必须通过 LegalEntityId 来使用 LegalEntity 微服务。
 在新的设计中，Address 服务已经废弃，只留下 "Legal Entity Micro Service"。
 
-![更好的 LegalEntity 微服务](http://www.tigerteam.dk/wp-content/uploads/2014/03/LegalEntity-microservice.png "更好的 LegalEntity 微服务")
+![更好的 LegalEntity 微服务](https://github.com/hotjk/translation/blob/master/microservices/Image/LegalEntity-microservice.png?raw=true)
 
 新的设计完全解决了事务问题，因为例子中只有一个服务。还有很多可以改进的，我们还没有谈到服务间如何通信，以及处理过程或用例要跨越多个聚合或服务时，如何确保整个服务的协调性和一致性，
 

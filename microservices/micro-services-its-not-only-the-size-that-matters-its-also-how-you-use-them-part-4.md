@@ -39,11 +39,11 @@ Monolith 感觉好极了，特别是在项目初期，问题很少，复杂度�
 
 硬币的另一面是高耦合和低内聚的风险，Monolith 很容易慢慢的变大，因为他承担了太多的职责，因为太容易使用已有的功能和数据。
 
-![Monolith 数据模型慢慢变大最终因为缺乏内聚而变得混乱](http://www.tigerteam.dk/wp-content/uploads/2014/02/model-growth.png "Monolith 数据模型慢慢变大最终因为缺乏内聚而变得混乱")
+![Monolith 数据模型慢慢变大最终因为缺乏内聚而变得混乱](https://github.com/hotjk/translation/blob/master/microservices/Image/model-growth.png?raw=true)
 
 这就是 Monolith 走下坡路：
 
-![Monolith 随着复杂度下滑](http://www.tigerteam.dk/wp-content/uploads/2014/05/monolith-slippery-slope.png "Monolith 随着复杂度下滑")
+![Monolith 随着复杂度下滑](https://github.com/hotjk/translation/blob/master/microservices/Image/monolith-slippery-slope.png?raw=true)
 
 Monolith 还有几个劣势：
 
@@ -65,11 +65,11 @@ Monolith 还有几个劣势：
 
 问题是大多数 Monolith 系统已经发展到了包含许多不同类型的业务。这意味着公司最终不得不有多个主系统，这些系统拥有很多相似的业务数据，每种业务都没有真正的单一源头。
 
-![Monolith 集成成堆的 Web Service](http://www.tigerteam.dk/wp-content/uploads/2014/05/integration-by-a-bunch-of-webservices.png "Monolith 集成成堆的 Web Service")
+![Monolith 集成成堆的 Web Service](https://github.com/hotjk/translation/blob/master/microservices/Image/integration-by-a-bunch-of-webservices.png?raw=true)
 
 如果我们刚接手一个 Monolith 系统，想要拆分成小一点的服务，我们还需要处理 Monolith 系统的内部耦合，典型的内部耦合包括集成、直接的方法调用、SQL Join 等等。如果我们只是简单的创建服务只会让事情更糟。
 
-![Monolith 分拆成服务](http://www.tigerteam.dk/wp-content/uploads/2014/05/monolith-sliced-up-into-microservices.png "Monolith 分拆成服务")
+![Monolith 分拆成服务](https://github.com/hotjk/translation/blob/master/microservices/Image/monolith-sliced-up-into-microservices.png?raw=true)
 
 所有这些都导致了服务边界模糊，一些服务会很单薄并且会过度的依赖其他服务的数据和功能。在我看来，这不是松耦合，也许恰恰相反。
 
@@ -80,7 +80,7 @@ Monolith 还有几个劣势：
 
 在旧有的 Monolith 系统，我们可能已经收集了关于零售领域的所有的功能和数据，可能包含的功能区有，商品目录、销售、库存、配送、结账，每一个功能区可以被叫做子域或者业务功能：
 
-![零售领域的功能区](http://www.tigerteam.dk/wp-content/uploads/2014/05/functional-areas.png "零售领域的功能区")
+![零售领域的功能区](https://github.com/hotjk/translation/blob/master/microservices/Image/functional-areas.png?raw=true)
 
 零售业务就是销售商品，所以每个功能区或者说子域都会以一些方式牵扯到商品（Product）这个领域概念：
 
@@ -113,7 +113,7 @@ Monolith 还有几个劣势：
 
 服务模型和边界看起来是这样（简化版）
 
-![简化的服务数据模型](http://www.tigerteam.dk/wp-content/uploads/2014/05/simple-service-data-models.png "简化的服务数据模型")
+![简化的服务数据模型](https://github.com/hotjk/translation/blob/master/microservices/Image/simple-service-data-models.png?raw=true)
 
 上面的服务领域模型展示了两个高内聚、低耦合、简单清晰的数据模型。两者唯一的耦合是订单行通过商品 ID 引用了商品（记得本文第二部分说过聚合间通过彼此 ID 引用）。
 网上商城（消费许多服务的客户端）负责显示销售的商品，客户购买商品的价格，当用户塞满购物筐，网上商城会发送包含用户想购买的商品的数量、价格、商品 ID 的命令消息给销售服务。后面我们会看到我们怎样使用复合式 UI 的优势来降低网上商城的耦合，现在我们只是假设网上商城这个客户端使用双向通信方式逐个调用服务。
@@ -146,11 +146,11 @@ Monolith 还有几个劣势：
 
 我们可以让销售服务通过消息通道（比如发布/订阅风格）监听这些事件，并允许销售服务建立其内部的商品对象，并将自己关心的数据放入新的商品对象：
 
-![通过事件进行数据复制](http://www.tigerteam.dk/wp-content/uploads/2014/05/data-duplication-over-events.png "通过事件进行数据复制")
+![通过事件进行数据复制](https://github.com/hotjk/translation/blob/master/microservices/Image/data-duplication-over-events.png?raw=true)
 
 对应的服务数据模型：
 
-![包含时间和数据复制的服务模型](http://www.tigerteam.dk/wp-content/uploads/2014/05/Data-duplication.png "包含时间和数据复制的服务模型")
+![包含时间和数据复制的服务模型](https://github.com/hotjk/translation/blob/master/microservices/Image/Data-duplication.png?raw=true)
 
 使用数据复制方案获得以下优势：
 
@@ -175,7 +175,7 @@ Monolith 还有几个劣势：
 
 让我们看看怎样使用事件来驱动订单处理流程。客户在网上商城按下接受按钮时，触发一个 AcceptOrder 命令消息发送（通常是异步）给销售服务。
 
-![OrderAccepted 事件驱动订单处理流程](http://www.tigerteam.dk/wp-content/uploads/2014/05/OrderAccepted1.png "OrderAccepted 事件驱动订单处理流程")
+![OrderAccepted 事件驱动订单处理流程](https://github.com/hotjk/translation/blob/master/microservices/Image/OrderAccepted1.png?raw=true)
 
 AccpetOrder 命令导致订单状态改变，订单状态被转换为 Accepted 状态。
 这种状态改变通过 OrderAccpeted 事件传达给所有对此感兴趣的服务，我们在描述一个订单已经被接受，这件事是不可撤销的（我们可以补偿，但是不能回滚这次改变）。
@@ -188,6 +188,6 @@ EDA 服务自己决定当事件发生时要做什么，当我们需要协调多�
 
 在下面的例子中，订单处理服务发送 OrderReadyForShipping 事件之前等待两个事件：OrderAccepted 和 CustomerBilled，两个事件需要包含足够的信息，表达出他们是同一个订单处理过程，可以通过 OrderID，也可以通过其他形式的相关 ID，这种服务间使用事件的协作方式也被称作编排，可以被看成对更传统的编排的补充（真实的解决方案会联合使用两种编排方式）。
 
-![编排的订单处理过程](http://www.tigerteam.dk/wp-content/uploads/2014/05/orderfulfilment-process.png "编排的订单处理过程")
+![编排的订单处理过程](https://github.com/hotjk/translation/blob/master/microservices/Image/orderfulfilment-process.png?raw=true)
 
 事件驱动架构已经说的够多了，这篇已经太长了，服务边界定义放到下次吧。

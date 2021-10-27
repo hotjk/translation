@@ -27,7 +27,7 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 
 业务功能是我们开发的软件的根基，Dan North 说过下面这段话：
 
-![Dan North：业务功能是资产](http://www.tigerteam.dk/wp-content/uploads/2015/02/dan-north-on-business-capabilities.png "Dan North：业务功能是资产")
+![Dan North：业务功能是资产](https://github.com/hotjk/translation/blob/master/microservices/Image/dan-north-on-business-capabilities.png?raw=true)
 
 最后 Udi Dahan 在 [The Known Unknowns of SOA](http://www.udidahan.com/2010/11/15/the-known-unknowns-of-soa/) 一文中说明了为什么他觉得服务应该是自治的，并成为特定业务功能的技术权威。
 
@@ -56,11 +56,11 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 
 太抽象了，我么举个复合 UI 的例子：
 
-![亚马逊的复合 UI](http://www.tigerteam.dk/wp-content/uploads/2015/02/Composite-UI-Amazon.png "亚马逊的复合 UI")
+![亚马逊的复合 UI](https://github.com/hotjk/translation/blob/master/microservices/Image/Composite-UI-Amazon.png?raw=true)
 
 组合 UI 区块的工作可以在客户端完成也可以在服务端完成。这是思考方式是每个服务渲染它负责的 UI 成为网上商城页面上一个特定的 DIV：
 
-![HTML 组合](http://www.tigerteam.dk/wp-content/uploads/2015/03/HTML-Composition.png "HTML 组合")
+![HTML 组合](https://github.com/hotjk/translation/blob/master/microservices/Image/HTML-Composition.png?raw=true)
 
 更新：如果组合发生在客户端，那么客户端 UI 组件和服务端对应的部分（比如一个 REST 接口）通常包含双向通信（很少使用发布/订阅模式，除非你希望服务器生成事件推到客户端）。为了让 UI 有应答，典型情况下客户端 UI 组件和服务端对应的部分使用基于异步的同步双向通信，比如使用带有 Javascript 回调的异步 Ajax 调用。
 
@@ -71,7 +71,7 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 
 缺点是给定的服务需要能够提供它的 UI 区块给所有可能的应用程序，比如 iOS 应用、后台 .Net 应用，基于 Java 的网上商城等等，下面的使用组合方式的例子中多个服务联合渲染/打印出发票：
 
-![复合 UI 发票例子](http://www.tigerteam.dk/wp-content/uploads/2015/02/Composite-Invoice.png "复合 UI 发票例子")
+![复合 UI 发票例子](https://github.com/hotjk/translation/blob/master/microservices/Image/Composite-Invoice.png?raw=true)
 
 我觉得，复合 UI 是自治服务真正强大的场合，从多个服务渲染内容却不会让服务之间耦合。你获得在各个层级封装良好的服务，我们展示出来的接口/协议很少暴露服务的数据和功能，服务通常暴露给服务的消费者，驱动本地 IT 操作接口（第三方/遗留系统集成）、事件（典型情况下只需要包含发生了什么事以及变更影响的聚合 ID）、几个对外暴露的命令，当然还有我们的 UI 区块，除了这些只有非常少的协议/接口暴露给生态系统。
 
@@ -122,7 +122,7 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 
 这并不意味着微服务只需要关注上面的提到的这一点，基于性能、可扩展性、一致性、可用性的需求，我们会选择在一个微服务里绑定更多的概念进而把微服务拆成更小的部分（可以理解为把服务多维度的拆解成更小的微服务）。
 
-![逻辑 SOA 组件](https://www.tigerteam.dk/wp-content/uploads/2015/02/Logical-SOA-components.png "逻辑 SOA 组件")
+![逻辑 SOA 组件](https://github.com/hotjk/translation/blob/master/microservices/Image/Logical-SOA-components.png?raw=true)
 
 并且没有强制要求服务的内部组件（微服务）只能使用事件来进行通信，绝对可能也有理由考虑那些可以应对分布式数据的存储的平台，比如 [NuoDB](http://www.nuodb.com/)
 
@@ -143,6 +143,6 @@ Microservices: It’s not (only) the size that matters, it’s (also) how you us
 
 Jay Kreps 描述了这个问题：
 
-![软件主要是人力资本，失去团队比丢失代码更可怕](http://www.tigerteam.dk/wp-content/uploads/2015/03/software-is-mostly-human-capital.png "软件主要是人力资本，失去团队比丢失代码更可怕")
+![软件主要是人力资本，失去团队比丢失代码更可怕](https://github.com/hotjk/translation/blob/master/microservices/Image/software-is-mostly-human-capital.png?raw=true)
 
 这篇文章到此为止，后面我们希望谈谈怎样集成遗留系统或第三方应用。

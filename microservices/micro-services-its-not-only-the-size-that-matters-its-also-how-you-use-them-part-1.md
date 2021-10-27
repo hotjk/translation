@@ -18,7 +18,7 @@
 
 传统的分层 SOA 里的服务是微服务么？
 
-![分层 SOA 也是微服务架构？](https://www.tigerteam.dk/wp-content/uploads/2014/01/Layered-SOA.png "分层 SOA 也是微服务架构？")
+![分层 SOA 也是微服务架构？](https://github.com/hotjk/translation/blob/master/microservices/Image/Layered-SOA.png?raw=true)
 
 传统的分层面向对象代码里，实体/数据服务（Entity/Data Services）是大致上跟仓储/数据访问对象（Repository/Data Access Object）功能类似的一层很薄的服务，实体服务（Entity Service）就是关系型数据库之上包了一层薄薄的壳。依据使用的编程语言和框架的差异，仓储（Repository）被大约 10 行到 300 行代码包装成 REST 或 Web 服务。符合微服务代码行数评判规则。
 
@@ -32,7 +32,7 @@
 
 如果我们竭尽所能地分解服务为非常小的服务，使用双向调用时延迟时间将非常可怕。如果微服务的焦点放在服务的大小上而不是使用模式上，不难想象我们将有一个服务调用星状图，一个应用调用一个服务，服务接着调用一堆小的服务，这些服务接着调用另一堆服务，这种使用模式甚至还会造成服务的循环调用。
 
-![微服务同步双向通信星状图。服务调用服务，然后被调用服务又调用其他服务，然后……](https://www.tigerteam.dk/wp-content/uploads/2014/02/Microservices_star.png "微服务同步双向通信星状图。服务调用服务，然后被调用服务又调用其他服务，然后……")
+![微服务同步双向通信星状图。服务调用服务，然后被调用服务又调用其他服务，然后……](https://github.com/hotjk/translation/blob/master/microservices/Image/Microservices_star.png?raw=true)
 
 我们尝试分解服务到非常小的粒度，造成一个服务需要再调用很多服务才能完成自己的任务，这是因为他们都想要对方的数据和功能。
 
@@ -46,7 +46,7 @@
 
 耦合有导致级联副作用的倾向。当修改服务协议时，所用使用该服务的其他服务都要跟着修改。当服务不可用时，所有依赖于该服务的其他服务也不可用了。当一个服务更新数据失败，所在 Process Services 的其他服务也需要应对更新失败的影响。
 
-![错误是在服务收到消息执行更新操作前发生的还是更新操作后发生的？](http://www.tigerteam.dk/wp-content/uploads/2014/02/Service-call-failing.png "错误是在服务收到消息执行更新操作前发生的还是更新操作后发生的？")
+![错误是在服务收到消息执行更新操作前发生的还是更新操作后发生的？](https://github.com/hotjk/translation/blob/master/microservices/Image/Service-call-failing.png?raw=true)
 
 上图中从客户端发起服务的调用，或者从服务中调用另一个服务，因为使用双向通信，客户端发送一个请求消息给服务，服务收到请求并执行一些处理，比如更新数据库，处理完成后，服务发送一个应答消息给客户端表明处理的结果。通信经由网络，比如 HTTP 调用或者 Queue 消息。比起我们在 Monolithic 开发方式下的内存方法调用，网络请求是缓慢且不稳定的。
 
@@ -65,7 +65,7 @@
 如果客户端尝试再次调用，服务必须实现允许对同一笔业务多次调用，或者接受同一笔业务相同的请求消息，仍然保证业务只被执行一次，也就是说服务必须是[幂等的](http://en.wikipedia.org/wiki/Idempotence#Computer_science_meaning)。
 如果要对多个服务进行一系列更新操作，我们必须面对一个巨大的一致性问题，因为我们没有也不应该使用分布式事务来协调这些更新。就像我们在 [SOA: synchronous communication, data ownership and coupling](http://www.tigerteam.dk/2014/soa-synchronous-communication-data-ownership-and-coupling/) 一文中谈到的，双向通信的补偿逻辑既不是微不足道的也不是简单的。
 
-![同步双向通信方式集成事务补偿](http://www.tigerteam.dk/wp-content/uploads/2014/02/synchronous-SOA-orchestration.png "同步双向通信方式集成事务补偿")
+![同步双向通信方式集成事务补偿](https://github.com/hotjk/translation/blob/master/microservices/Image/synchronous-SOA-orchestration.png?raw=true)
 
 假设一种极端的微服务架构，每个服务只负责实体的一个属性（比如姓名、地址、邮编、城市等等），延迟时间会是一个巨大的问题，稳定性、协调服务调用和补偿也会是巨大的问题。我们一定是没找到正确的服务设计指导准则。
 
