@@ -26,7 +26,7 @@
 
 就像在 [SOA: synchronous communication, data ownership and coupling](http://www.tigerteam.dk/2014/soa-synchronous-communication-data-ownership-and-coupling/) 文中对双向通信的讨论，在分层 SOA 架构下，服务责任描述和服务自治有严重的问题，Process Service 和 Task Service 的错误补偿相当复杂，服务合同变更和服务的突发故障也是问题，通过网络方式调用多个服务的延迟时间（发起服务调用到收到应答的时间）也很长。
 
-上面的例子中，没单就代码行数对微服务进行分类，我们可以武断的认定 Entity Service/Task Service/Process Service 都是微服务，这清晰的表达出使用代码行数来区分服务是不是微服务的做法多糟糕。
+上面的例子中，单就代码行数对微服务进行分类，我们可以武断的认定 Entity Service/Task Service/Process Service 都是微服务，这清晰的表达出使用代码行数来区分服务是不是微服务的做法多糟糕。
 
 如果我们竭尽所能地分解服务为非常小的服务，使用双向调用时延迟时间将非常可怕。如果微服务的焦点放在服务的大小上而不是使用模式上，不难想象我们将有一个服务调用星状图，一个应用调用一个服务，服务接着调用一堆小的服务，这些服务接着调用另一堆服务，这种使用模式甚至还会造成服务的循环调用。
 
