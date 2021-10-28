@@ -157,7 +157,7 @@ Simon Brown 在 [Software Architecture for Developers](https://softwarearchitect
 
 在模块化单体架构的情况下，整个系统在一个进程中工作时，整个系统突然停止工作，这个系统就不可用了。在微服务架构的情况下，这个不稳定的的模块可以部署在一个单独的进程中，如果它被停止，系统的其余部分还可以正常工作。
 
-![故障影响](https://github.com/hotjk/translation/blob/master/Modular-Monolith_-Architectural-Drivers-Failure-impact-768x304.jpg?raw=true)
+![故障影响](https://github.com/hotjk/translation/blob/master/microservices/mm/Modular-Monolith_-Architectural-Drivers-Failure-impact-768x304.jpg?raw=true)
 
 为了提高模块化单体的可用性，您可以部署更多的服务节点，但与讨论可伸缩性时一样，与微服务架构相比，单体架构水平扩展的资源利用率较低。
 
@@ -165,7 +165,7 @@ Simon Brown 在 [Software Architecture for Developers](https://softwarearchitect
 
 模块化单体无法绕过的一个关键特征是不能做技术异构。整个系统处于同一个进程中，必须运行在同一个运行时环境中。这并不意味着它必须使用相同的语言编写，因为某些平台支持多种语言（例如 .NET CLR 或 Java JVM）。 然而，多个技术栈混搭是不可能的。
 
-![技术异构](https://github.com/hotjk/translation/blob/master/Modular-Monolith_-Architectural-Drivers-Heterogeneous-Technology-768x260.jpg?raw=true)
+![技术异构](https://github.com/hotjk/translation/blob/master/microservices/mm/Modular-Monolith_-Architectural-Drivers-Heterogeneous-Technology-768x260.jpg?raw=true)
 
 技术异构这个特性可能是切换到微服务架构的关键因素。当然并不是所有人都有这个需求，公司通常只使用一种技术栈，受限于团队能力和软件许可证等因素，很多人从未考虑过要使用不同的技术栈实现系统的各部分。
 
