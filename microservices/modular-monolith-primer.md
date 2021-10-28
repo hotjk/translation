@@ -3,12 +3,12 @@
 
 ![Modular Monolith](https://github.com/hotjk/translation/blob/master/microservices/mm/Modular_Monolith_a_Primer-825x510.jpg)
  
-# 模块化单体：入门
+# 模块化单体：基础
 
 这篇文章是关于模块化单体架构的系列文章的一部分：
 
-1. 模块化单体：入门
-2. [模块化单体：架构驱动](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architectural-drivers.md)
+1. 模块化单体：基础
+2. [模块化单体：架构驱动因素](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architectural-drivers.md)
 3. [模块化单体：架构执行](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architecture-enforcement.md)
 4. [模块化单体：集成风格](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-integration-styles.md)
 5. [模块化单体：以领域为中心的设计](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-domain-centric-design.md)
