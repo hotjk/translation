@@ -10,7 +10,7 @@
 1. 模块化单体：基础
 2. [模块化单体：架构驱动因素](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architectural-drivers.md)
 3. [模块化单体：架构实施](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architecture-enforcement.md)
-4. [模块化单体：集成风格](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-integration-styles.md)
+4. [模块化单体：集成方式](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-integration-styles.md)
 5. [模块化单体：以领域为中心的设计](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-domain-centric-design.md)
 
 
@@ -136,4 +136,4 @@
 3. 模块化单体架构是以模块化方式设计的单体系统的明确名称。
 4. 为了实现高水平的模块化，每个模块必须是独立的，具有提供特定功能所需的一切（按业务领域分离），封装良好并具有明确定义的接口合约。
 
-在下一篇文章中，我将讨论模块化单体架构与微服务相比的优缺点。
+在[下一篇文章](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architectural-drivers.md)中，我将讨论模块化单体架构与微服务相比的优缺点。

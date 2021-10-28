@@ -10,7 +10,7 @@
 1. [模块化单体：基础](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-primer.md)
 2. [模块化单体：架构驱动因素](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architectural-drivers.md)
 3. 模块化单体：架构实施
-4. [模块化单体：集成风格](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-integration-styles.md)
+4. [模块化单体：集成方式](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-integration-styles.md)
 5. [模块化单体：以领域为中心的设计](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-domain-centric-design.md)
 
 ## 介绍
