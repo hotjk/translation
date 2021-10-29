@@ -1,7 +1,7 @@
 本文翻译自 Kamil Grzybek 的博客文章，原文地址：
 > http://www.kamilgrzybek.com/design/modular-monolith-domain-centric-design/
 
-![Modular Monolith Domain-Centric Design](https://github.com/hotjk/translation/blob/master/microservices/mm/ModularMonolith_Design_logo-825x510.jpg?raw=true)
+![Modular Monolith Domain-Centric Design](https://github.com/hotjk/translation/blob/master/microservices/mm/ModularMonolith_Design_logo-825x510.png?raw=true)
  
 # 模块化单体：领域中心化设计
 
@@ -27,7 +27,7 @@
 
 让我们从高层视角看看这样的架构是怎样的：
 
-![模块化单体-领域中心化设计](https://github.com/hotjk/translation/blob/master/mm/ModularMonolithDesign-768x603.jpg?raw=true)
+![模块化单体-领域中心化设计](https://github.com/hotjk/translation/blob/master/microservices/mm/ModularMonolithDesign-768x603.jpg?raw=true)
 
 从高层视角来看，领域中心化设计与领域中心化架构有相似之处。无论是从整个系统（[系统架构](https://en.wikipedia.org/wiki/Systems_architecture)）还是从单个模块（[应用程序架构](https://en.wikipedia.org/wiki/Applications_architecture)）看，都很相似。
 
@@ -37,13 +37,13 @@
 - 模块 API：主要端口
 - 辅助端口及其适配器（与数据库、事件总线、其他模块通信）
 
-![模块化单体-六边形架构视角](https://github.com/hotjk/translation/blob/master/mm/MMDesign_Hexagonal-1-768x544?raw=true)
+![模块化单体-六边形架构视角](https://github.com/hotjk/translation/blob/master/microservices/mm/MMDesign_Hexagonal-1-768x544.jpg?raw=true)
 
 如果我们仔细观察，这与 [洋葱架构](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)和[整洁架构](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)没有什么不同，都是将领域放在中心，并且遵守这条依赖规则：
 
 > 源代码依赖性必须仅指向内部，指向更高级别的策略。
 
-![模块化单体-整洁/洋葱架构视角](https://github.com/hotjk/translation/blob/master/mm/MMDesign_Clean_Onion-768x681?raw=true)
+![模块化单体-整洁/洋葱架构视角](https://github.com/hotjk/translation/blob/master/microservices/mm/MMDesign_Clean_Onion-768x681.jpg?raw=true)
 
 让我们尝试一个个介绍上面提到的概念。
 
@@ -65,7 +65,7 @@ API 应该非常精简。不应该包含逻辑，无论是应用层逻辑还是�
 
 模块的架构如下：
 
-![模块架构](https://github.com/hotjk/translation/blob/master/mm/Module_Architecture-1?raw=true)
+![模块架构](https://github.com/hotjk/translation/blob/master/microservices/mm/Module_Architecture-1.jpg?raw=true)
 
 #### 模块 Startup API
 
@@ -110,7 +110,7 @@ API 应该非常精简。不应该包含逻辑，无论是应用层逻辑还是�
 
 有人说以领域为中心的架构和垂直切片是对立的。我觉得恰恰相反，两者完美互补。
 
-![模块化单体架构风格](https://github.com/hotjk/translation/blob/master/mm/ModulesArchitecture-768x228?raw=true)
+![模块化单体架构风格](https://github.com/hotjk/translation/blob/master/microservices/mm/ModulesArchitecture-768x228.jpg?raw=true)
 
 ### 模块数据
 
