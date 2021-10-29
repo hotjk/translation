@@ -13,7 +13,7 @@
 
 交互模式：Request-Reply 还是 Publish-Subscribe
 
-![Request-Reply vs. Publish-Subscribe](https://github.com/hotjk/translation/blob/master/microservices/cva/rr-ps-e1426428195917.png)
+![Request-Reply vs. Publish-Subscribe](https://github.com/hotjk/translation/blob/master/microservices/cva/rr-ps-e1426428195917.png?raw=true)
 
 - Request-Reply（请求-应答）意味着一个服务处理信息的特定请求或者执行一些动作并返回一个应答。发起调用的服务需要知道去哪儿请求以及请求些什么？这种模式仍然可以被实现为异步执行，并且你还可以做一些抽象使服务调用方不需要知道被调用服务的物理地址，不能逃避的一点是服务必须明确的要求一个特定的信息和功能（或者执行动作）并等待应答。
 - Publish-Subscribe（发布-订阅） 这种模式下的服务将自己注册为对特定的信息感兴趣，或者能够处理特定的请求，相关的信息和请求将被交付给它，并且它可以决定怎么处理这些信息和请求。本文假定有一些中间件能够处理交付或者发布消息给订阅这些消息服务。
@@ -28,19 +28,19 @@
 以下的描述中我们将使用两个服务来阐述每种方式，订单服务负责管理订单，配送服务负责配送订单里的商品。这些服务是网上商店的一部分，网上商店还可能包含一些类似购物车、商品目录（搜索）等服务。
 
 ### 1. REQUEST-REPLY WITH EVENTS
-![REQUEST-REPLY WITH EVENTS](https://github.com/hotjk/translation/blob/master/microservices/cva/rre1.png)
+![REQUEST-REPLY WITH EVENTS](https://github.com/hotjk/translation/blob/master/microservices/cva/rre1.png?raw=true)
 
 在这种模式下，一个服务请求另一个导致事件发生的特定服务，这意味着这两种服务之间有很强的依赖。配送服务必须知道要连接那个服务来获得订单相关的事件，这也导致了运行时依赖，因为配送服务只有在订单服务可用的时候才能配送新订单。
 既然配送服务只接收事件，它基于事件里的信息自己决定何时一个订单可以被配送，订单服务不需要知道配送服务的任何信息，它只是简单的提供事件表明当其他服务请求时订单进行怎样的处理，把响应事件的职责完全交给请求事件的服务。
 
 ### 2. REQUEST-REPLY WITH COMMANDS/QUERIES
-![REQUEST-REPLY WITH COMMANDS/QUERIES](https://github.com/hotjk/translation/blob/master/microservices/cva/rrc.png)
+![REQUEST-REPLY WITH COMMANDS/QUERIES](https://github.com/hotjk/translation/blob/master/microservices/cva/rrc.png?raw=true)
 
 在这种模式下，订单服务将请求配送服务来配送一个订单，这意味着强烈的依赖，因为订单服务明确的请求一个特定的服务来处理配送，现在订单服务必须决定何时一个订单准备好配送，它意识到配送服务的存在，甚至知道怎样与配送服务交互，在订单配送前需要考虑是否有其他因素关联到订单（比如客户信用卡状态），订单服务在请求配送服务来配送订单前也需要考虑这一点。现在业务处理被混到了架构里，因此架构不能被简单的修改。
 这也是运行时依赖，因为订单服务必须确保配送请求成功交付给了配送服务。
 
 ### 3. PUBLISH-SUBSCRIBE WITH EVENTS
-![PUBLISH-SUBSCRIBE WITH EVENTS](https://github.com/hotjk/translation/blob/master/microservices/cva/pse1.png)
+![PUBLISH-SUBSCRIBE WITH EVENTS](https://github.com/hotjk/translation/blob/master/microservices/cva/pse1.png?raw=true)
 
 配送服务注册自己对订单相关的事件感兴趣，注册后，配送服务会收到订单的所有事件而不需要关心订单事件的来源，这是对订单事件来源的松散耦合，配送服务需要保留接收到事件的副本，这样就可以决定何时订单准备好配送。
 订单服务需要对配送无关，如果多个服务提供包含配送服务需要的相关数据的订单相关事件，配送服务应该不可识别，如果一个提供订单事件的服务宕机，配送服务也应该不知道，只是收到的事件变少了，配送服务不会因此阻塞。
@@ -48,7 +48,7 @@
 
 ### 4. PUBLISH-SUBSCRIBE WITH COMMANDS/QUERIES
 
-![PUBLISH-SUBSCRIBE WITH COMMANDS/QUERIES](https://github.com/hotjk/translation/blob/master/microservices/cva/psc.png)
+![PUBLISH-SUBSCRIBE WITH COMMANDS/QUERIES](https://github.com/hotjk/translation/blob/master/microservices/cva/psc.png?raw=true)
 
 配送服务自己注册为能够配送货物的服务，接受所有想要配送货物的命令，配送服务不需要意识到配送命令的来源，同样订单服务业不知道那些服务将处理配送，在这个意义上说，他们是松散耦合的，不过，订单服务知道既然发送了配送命令，订单必须被配送的事实，这确实让耦合更强了。
 

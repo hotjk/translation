@@ -1,7 +1,7 @@
 本文翻译自 Kamil Grzybek 的博客文章，原文地址：
 > https://www.kamilgrzybek.com/design/modular-monolith-architectural-drivers/
 
-![Modular Monolith Architectural Drivers](https://github.com/hotjk/translation/blob/master/microservices/mm/Modular_Monolith_Architectural_Drivers_Promo-825x510.jpg)
+![Modular Monolith Architectural Drivers](https://github.com/hotjk/translation/blob/master/microservices/mm/Modular_Monolith_Architectural_Drivers_Promo-825x510.jpg?raw=true)
  
 # 模块化单体：架构驱动因素
 
@@ -11,8 +11,7 @@
 2. 模块化单体：架构驱动因素
 3. [模块化单体：架构实施](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architecture-enforcement.md)
 4. [模块化单体：集成方式](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-integration-styles.md)
-5. [模块化单体：以领域为中心的设计](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-domain-centric-design.md)
-
+5. [模块化单体：领域中心化设计](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-domain-centric-design.md)
 
 ## 介绍
 

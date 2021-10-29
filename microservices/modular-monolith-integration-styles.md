@@ -1,7 +1,7 @@
 本文翻译自 Kamil Grzybek 的博客文章，原文地址：
 > https://www.kamilgrzybek.com/design/modular-monolith-integration-styles/
 
-![Modular Monolith Integration Styles](https://github.com/hotjk/translation/blob/master/microservices/mm/modular_monolith_integration_styles_logo-825x510.jpg)
+![Modular Monolith Integration Styles](https://github.com/hotjk/translation/blob/master/microservices/mm/modular_monolith_integration_styles_logo-825x510.jpg?raw=true)
  
 # 模块化单体：集成方式
 
@@ -11,7 +11,7 @@
 2. [模块化单体：架构驱动因素](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architectural-drivers.md)
 3. [模块化单体：架构实施](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-architecture-enforcement.md)
 4. 模块化单体：集成方式
-5. [模块化单体：以领域为中心的设计](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-domain-centric-design.md)
+5. [模块化单体：领域中心化设计](https://github.com/hotjk/translation/blob/master/microservices/modular-monolith-domain-centric-design.md)
 
 ## 介绍
 
